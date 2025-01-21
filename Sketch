@@ -1,0 +1,39 @@
+const weatherURL = "https://raw.githubusercontent.com/fivethirtyeight/data/refs/heads/master/us-weather-history/KNYC.csv";
+
+let weatherTable;
+let seasons = ['Winter', 'Spring', 'Summer', 'Autumn'];
+let currentColumn = 0;
+let seasonData = [];
+let temperatures = [];
+
+function preload() {
+  weatherTable = loadTable(weatherURL, 'csv', 'header');
+}
+
+function setup() {
+  createCanvas(800, 400);
+  noLoop();
+  
+  let winterTemps = [];
+  let springTemps = [];
+  let summerTemps = [];
+  let autumnTemps = [];
+  
+  for (let r = 0; r < weatherTable.getRowCount(); r++) {
+    let date = weatherTable.getString(r, 0);  // Assuming first column is Date
+    let temp = weatherTable.getNum(r, 1);     // Assuming second column is Temperature
+    
+    if (date.length > 0 && !isNaN(temp)) {
+      let month = int(date.split('/')[0]);  // Get the month from date (MM/DD/YYYY)
+      
+      if (month >= 12 || month <= 2) {
+        winterTemps.push(temp);
+      } else if (month >= 3 && month <= 5) {
+        springTemps.push(temp);
+      } else if (month >= 6 && month <= 8) {
+        summerTemps.push(temp);
+      } else {
+        autumnTemps.push(temp);
+      }
+    }
+  }
