@@ -106,3 +106,12 @@ function drawLineGraph() {
   fill(0);
   text(seasons[currentColumn], width / 2, 30);
 }
+function keyPressed() {
+  if (keyCode === RIGHT_ARROW) {
+    currentColumn++;
+    if (currentColumn >= seasons.length) {
+      currentColumn = 0;  // Loop back to the first season
+    }
+   drawLineGraph()
+    
+  } }
