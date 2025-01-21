@@ -37,10 +37,10 @@ function setup() {
       }
     }
   }
-
+  
   seasonData = [winterTemps, springTemps, summerTemps, autumnTemps];
   
-  // Calculate mean for each season, handle empty data
+  // Calculate mean for each season, handle empty data gracefully
   for (let i = 0; i < seasons.length; i++) {
     if (seasonData[i].length > 0) {
       let meanTemp = seasonData[i].reduce((sum, temp) => sum + temp, 0) / seasonData[i].length;
@@ -52,4 +52,57 @@ function setup() {
   
   // Draw the initial line graph
   drawLineGraph();
+}
+
+function draw() {}
+function drawLineGraph() {
+  background(220);
+  
+  // Draw X and Y axes
+  stroke(0);
+  line(50, height - 50, width - 50, height - 50);   // X-axis
+  line(50, height - 50, 50, 50);                   // Y-axis
+  
+  // Labels
+  textAlign(CENTER, CENTER);
+  textSize(14);
+  fill(0);
+  text("Month", width / 2, height - 20);
+  text("Mean Temperature (°F)", 10, height / 2);
+  
+  // Set up Graph points
+  let xSpacing = (width - 100) / seasonData[currentColumn].length;
+  let x = 50;
+  let yMin = Math.min(...temperatures) - 10;
+  let yMax = Math.max(...temperatures) + 10;
+  let yScaling = (height - 100) / (yMax - yMin);
+  
+  // Offset for centering the graph
+  let yOffset = 50;  // Move down 50 pixels
+  
+  // Draw mean temperature line
+  stroke(0);
+  strokeWeight(2);
+  noFill();
+  beginShape();
+  for (let i = 0; i < seasonData[currentColumn].length; i++) {
+    let x = 50 + (i * xSpacing);
+    let y = map(seasonData[currentColumn][i], yMin, yMax, height - 50 + yOffset, 50 + yOffset);
+    vertex(x, y);
+  }
+  endShape();
+  
+  // Draw points on line
+  fill(0);
+  for (let i = 0; i < seasonData[currentColumn].length; i++) {
+    let x = 50 + (i * xSpacing);
+    let y = map(seasonData[currentColumn][i], yMin, yMax, height - 50 + yOffset, 50 + yOffset);
+    ellipse(x, y, 5, 5);
+  }
+  
+  // Draw Season label
+  textAlign(CENTER, CENTER);
+  textSize(16);
+  fill(0);
+  text(seasons[currentColumn], width / 2, 30);
 }
