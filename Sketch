@@ -37,3 +37,19 @@ function setup() {
       }
     }
   }
+
+  seasonData = [winterTemps, springTemps, summerTemps, autumnTemps];
+  
+  // Calculate mean for each season, handle empty data
+  for (let i = 0; i < seasons.length; i++) {
+    if (seasonData[i].length > 0) {
+      let meanTemp = seasonData[i].reduce((sum, temp) => sum + temp, 0) / seasonData[i].length;
+      temperatures.push(meanTemp);
+    } else {
+      temperatures.push(0);  // Default to 0 if no temperatures
+    }
+  }
+  
+  // Draw the initial line graph
+  drawLineGraph();
+}
